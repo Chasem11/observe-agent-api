@@ -1,0 +1,231 @@
+{
+  "info": {
+    "name": "Observe Insurance Claims API",
+    "description": "API for Observe Insurance AI Claims Support Assistant (VAPI integration)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://your-cloud-run-url.run.app",
+      "type": "string"
+    },
+    {
+      "key": "local_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Root Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Basic health check endpoint"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Claims",
+      "item": [
+        {
+          "name": "Lookup Claim by Phone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"5551234567\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/claims/lookup",
+              "host": ["{{base_url}}"],
+              "path": ["claims", "lookup"]
+            },
+            "description": "Look up claim information by phone number. Used by VAPI for authentication."
+          },
+          "response": [
+            {
+              "name": "Claim Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"5551234567\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/claims/lookup",
+                  "host": ["{{base_url}}"],
+                  "path": ["claims", "lookup"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"found\": true,\n  \"phone\": \"5551234567\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"claim_status\": \"approved\",\n  \"claim_id\": \"CLM-2024-001\",\n  \"email\": \"john.doe@example.com\"\n}"
+            },
+            {
+              "name": "Claim Not Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"9999999999\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/claims/lookup",
+                  "host": ["{{base_url}}"],
+                  "path": ["claims", "lookup"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"found\": false,\n  \"message\": \"No claim found for this phone number\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Interactions",
+      "item": [
+        {
+          "name": "Log Interaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"caller_name\": \"John Doe\",\n  \"phone\": \"5551234567\",\n  \"summary\": \"Customer called to check claim status. Claim was approved. Customer satisfied.\",\n  \"sentiment\": \"positive\",\n  \"call_duration\": 120,\n  \"topics\": [\"claim_status\", \"authentication\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/interactions/log",
+              "host": ["{{base_url}}"],
+              "path": ["interactions", "log"]
+            },
+            "description": "Log a customer interaction after a call. Used by VAPI at end of conversation."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"caller_name\": \"John Doe\",\n  \"phone\": \"5551234567\",\n  \"summary\": \"Customer called to check claim status. Claim was approved. Customer satisfied.\",\n  \"sentiment\": \"positive\",\n  \"call_duration\": 120,\n  \"topics\": [\"claim_status\", \"authentication\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/interactions/log",
+                  "host": ["{{base_url}}"],
+                  "path": ["interactions", "log"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Interaction logged successfully\",\n  \"id\": \"abc123xyz\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Local Testing",
+      "item": [
+        {
+          "name": "Local - Lookup Claim",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"5551234567\"\n}"
+            },
+            "url": {
+              "raw": "{{local_url}}/claims/lookup",
+              "host": ["{{local_url}}"],
+              "path": ["claims", "lookup"]
+            },
+            "description": "Test locally on localhost:8000"
+          },
+          "response": []
+        },
+        {
+          "name": "Local - Log Interaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"caller_name\": \"Test User\",\n  \"phone\": \"5551234567\",\n  \"summary\": \"Test interaction\",\n  \"sentiment\": \"neutral\"\n}"
+            },
+            "url": {
+              "raw": "{{local_url}}/interactions/log",
+              "host": ["{{local_url}}"],
+              "path": ["interactions", "log"]
+            },
+            "description": "Test locally on localhost:8000"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
