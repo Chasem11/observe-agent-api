@@ -12,25 +12,6 @@ async def lookup_claim(request: Request):
     Look up claim information by phone number
     
     VAPI Tool Call Endpoint
-    
-    Expects VAPI format:
-    {
-      "attributes": {
-        "id": "toolCallId",
-        "function": {
-          "name": "lookupClaim",
-          "arguments": "{\"phone\":\"5551234567\"}"
-        }
-      }
-    }
-    
-    Returns VAPI format:
-    {
-      "results": [{
-        "toolCallId": "toolCallId",
-        "result": { claim data or error }
-      }]
-    }
     """
     try:
         # Get normalized body from middleware

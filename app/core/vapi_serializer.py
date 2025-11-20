@@ -2,8 +2,6 @@
 VAPI Request Serializer Middleware
 
 Handles incoming VAPI tool call format and normalizes it for route handlers.
-VAPI sends: { "attributes": { "function": { "arguments": "{\"key\":\"value\"}" } } }
-Normalizes to: { "key": "value" }
 """
 import json
 from typing import Any, Dict, Optional
@@ -72,19 +70,8 @@ async def get_normalized_body(request: Request) -> Dict[str, Any]:
 
 
 def format_vapi_response(request: Request, result: Any) -> Dict[str, Any]:
-    """
-    Format response in VAPI's expected format
-    
-    VAPI expects:
-    {
-      "results": [
-        {
-          "toolCallId": "X",
-          "result": "Y"
-        }
-      ]
-    }
-    """
+    #Normalize response into VAPI format
+
     tool_call_id = getattr(request.state, "vapi_tool_call_id", None)
     
     return {
