@@ -8,8 +8,8 @@ app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description="API for Observe Insurance AI Claims Support Assistant",
-    docs_url="/docs",
-    redoc_url="/redoc"
+    docs_url=None,
+    redoc_url=None
 )
 
 # Add CORS middleware
