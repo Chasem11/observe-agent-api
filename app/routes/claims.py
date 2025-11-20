@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from app.services.claim_service import ClaimRepository
-import json
+from app.core.vapi_serializer import get_normalized_body, format_vapi_response
 
 router = APIRouter(prefix="/claims", tags=["claims"])
 
@@ -11,31 +11,37 @@ async def lookup_claim(request: Request):
     """
     Look up claim information by phone number
     
-    Expects VAPI format with arguments field
+    VAPI Tool Call Endpoint
     
-    Returns claim details if found, or {"found": False} if not found
+    Expects VAPI format:
+    {
+      "attributes": {
+        "id": "toolCallId",
+        "function": {
+          "name": "lookupClaim",
+          "arguments": "{\"phone\":\"5551234567\"}"
+        }
+      }
+    }
+    
+    Returns VAPI format:
+    {
+      "results": [{
+        "toolCallId": "toolCallId",
+        "result": { claim data or error }
+      }]
+    }
     """
     try:
-        body = await request.json()
+        # Get normalized body from middleware
+        body = await get_normalized_body(request)
         
-        # Parse VAPI-style arguments
-        if "arguments" not in body:
-            return JSONResponse(
-                {"error": "Missing arguments field", "found": False}, 
-                status_code=400
-            )
-        
-        args = body["arguments"]
-        
-        # VAPI sends arguments as a string — parse it into JSON
-        if isinstance(args, str):
-            args = json.loads(args)
-        
-        phone = args.get("phone")
+        phone = body.get("phone")
         
         if not phone:
+            error_result = {"error": "Phone is required", "found": False}
             return JSONResponse(
-                {"error": "Phone is required", "found": False}, 
+                format_vapi_response(request, error_result),
                 status_code=400
             )
         
@@ -44,19 +50,16 @@ async def lookup_claim(request: Request):
         result = await claim_repo.get_claim_by_phone(str(phone))
         
         if not result.get("found"):
-            return JSONResponse({"found": False, "message": "No claim found for this phone number"})
+            result = {"found": False, "message": "No claim found for this phone number"}
         
-        return JSONResponse(result)
+        # Format response for VAPI (or return directly if not VAPI)
+        return JSONResponse(format_vapi_response(request, result))
         
-    except json.JSONDecodeError:
-        return JSONResponse(
-            {"error": "Invalid JSON in arguments", "found": False}, 
-            status_code=400
-        )
     except Exception as err:
         print(f"Error in lookup_claim: {err}")
+        error_result = {"error": "Internal server error", "found": False}
         return JSONResponse(
-            {"error": "Internal server error", "found": False}, 
+            format_vapi_response(request, error_result),
             status_code=500
         )
 
