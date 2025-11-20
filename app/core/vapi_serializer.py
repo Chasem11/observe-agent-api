@@ -30,25 +30,28 @@ class VAPISerializer(BaseHTTPMiddleware):
                     logger.info(f"Received VAPI request: {json.dumps(data)}")
                     
                     # Extract arguments from VAPI format
-                    if "attributes" in data and "function" in data["attributes"]:
-                        function_data = data["attributes"]["function"]
-                        args_string = function_data.get("arguments", "{}")
-                        
-                        # Parse the stringified JSON arguments
-                        if isinstance(args_string, str):
-                            normalized_data = json.loads(args_string)
+                    if "message" in data and "toolCalls" in data["message"]:
+                        tool_calls = data["message"]["toolCalls"]
+                        if tool_calls and len(tool_calls) > 0:
+                            first_tool_call = tool_calls[0]
+                            
+                            # Extract toolCallId
+                            tool_call_id = first_tool_call.get("id")
+                            
+                            # Extract arguments (already parsed as dict)
+                            function_data = first_tool_call.get("function", {})
+                            normalized_data = function_data.get("arguments", {})
+                            
+                            # Store in request state
+                            request.state.normalized_body = normalized_data
+                            request.state.vapi_tool_call_id = tool_call_id
+                            logger.info(f"Parsed VAPI - body: {normalized_data}, toolCallId: {tool_call_id}")
                         else:
-                            normalized_data = args_string
-                        
-                        # Extract toolCallId
-                        tool_call_id = data["attributes"].get("id")
-                        
-                        # Store in request state
-                        request.state.normalized_body = normalized_data
-                        request.state.vapi_tool_call_id = tool_call_id
-                        logger.info(f"Parsed VAPI - body: {normalized_data}, toolCallId: {tool_call_id}")
+                            logger.warning("VAPI request has no toolCalls")
+                            request.state.normalized_body = {}
+                            request.state.vapi_tool_call_id = None
                     else:
-                        # Not VAPI format - this shouldn't happen
+                        # Not VAPI format
                         logger.warning(f"Not VAPI format. Keys: {list(data.keys())}")
                         request.state.normalized_body = {}
                         request.state.vapi_tool_call_id = None
