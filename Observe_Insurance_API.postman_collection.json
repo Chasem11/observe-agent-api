@@ -52,14 +52,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"5551234567\"\n}"
+              "raw": "{\n  \"arguments\": \"{\\\"phone\\\": \\\"5551234567\\\"}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/claims/lookup",
               "host": ["{{base_url}}"],
               "path": ["claims", "lookup"]
             },
-            "description": "Look up claim information by phone number. Used by VAPI for authentication."
+            "description": "Look up claim information by phone number. Uses VAPI format with arguments field."
           },
           "response": [
             {
@@ -69,7 +69,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"phone\": \"5551234567\"\n}",
+                  "raw": "{\n  \"arguments\": \"{\\\"phone\\\": \\\"5551234567\\\"}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -95,7 +95,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"phone\": \"9999999999\"\n}",
+                  "raw": "{\n  \"arguments\": \"{\\\"phone\\\": \\\"9999999999\\\"}\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -190,14 +190,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"5551234567\"\n}"
+              "raw": "{\n  \"arguments\": \"{\\\"phone\\\": \\\"5551234567\\\"}\"\n}"
             },
             "url": {
               "raw": "{{local_url}}/claims/lookup",
               "host": ["{{local_url}}"],
               "path": ["claims", "lookup"]
             },
-            "description": "Test locally on localhost:8000"
+            "description": "Test locally on localhost:8000 with VAPI format"
           },
           "response": []
         },
