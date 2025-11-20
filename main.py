@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.core.vapi_serializer import VAPISerializer
 from app.routes import claims_router, interactions_router
 
 # Initialize FastAPI app
@@ -11,6 +12,9 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None
 )
+
+# Add VAPI serializer middleware (first layer)
+app.add_middleware(VAPISerializer)
 
 # Add CORS middleware
 app.add_middleware(
