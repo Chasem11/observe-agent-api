@@ -8,6 +8,9 @@ from typing import Any, Dict, Optional
 from fastapi import Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
+from app.core.logger import get_logger
+
+logger = get_logger("vapi-serializer")
 
 
 class VAPISerializer(BaseHTTPMiddleware):
@@ -24,6 +27,7 @@ class VAPISerializer(BaseHTTPMiddleware):
             try:
                 if body:
                     data = json.loads(body)
+                    logger.info(f"Received VAPI request: {json.dumps(data)}")
                     
                     # Extract arguments from VAPI format
                     if "attributes" in data and "function" in data["attributes"]:
@@ -42,16 +46,19 @@ class VAPISerializer(BaseHTTPMiddleware):
                         # Store in request state
                         request.state.normalized_body = normalized_data
                         request.state.vapi_tool_call_id = tool_call_id
+                        logger.info(f"Parsed VAPI - body: {normalized_data}, toolCallId: {tool_call_id}")
                     else:
                         # Not VAPI format - this shouldn't happen
+                        logger.warning(f"Not VAPI format. Keys: {list(data.keys())}")
                         request.state.normalized_body = {}
                         request.state.vapi_tool_call_id = None
                         
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
                 # If JSON is invalid, let the route handler deal with it
+                logger.error(f"JSON decode error: {e}")
                 pass
             except Exception as e:
-                print(f"VAPI Serializer error: {e}")
+                logger.error(f"VAPI serializer error: {e}", exc_info=True)
         
         response = await call_next(request)
         return response
