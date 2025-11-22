@@ -5,10 +5,11 @@ from datetime import datetime
 
 class InteractionLog(BaseModel):
     """Model for logging customer interactions at end of call"""
-    caller_name: Optional[str] = Field(None, description="Full name of the caller (if authenticated)")
+    caller_name: Optional[str] = Field(None, description="Full name of the caller (if authenticated), or 'Unknown'")
     phone: Optional[str] = Field(None, description="Caller's phone number")
-    summary: str = Field(..., description="Summary of the conversation")
+    summary: str = Field(..., description="One neutral sentence describing the interaction")
     sentiment: str = Field(..., description="Call sentiment: positive, neutral, or negative")
+    needs_handoff: bool = Field(False, description="True if escalation was requested or required, otherwise False")
     timestamp: Optional[str] = Field(None, description="ISO timestamp of the interaction")
     
     class Config:
@@ -18,6 +19,7 @@ class InteractionLog(BaseModel):
                 "phone": "5551234567",
                 "summary": "Customer called to check claim status. Claim was approved. Customer confirmed identity and was satisfied with the information.",
                 "sentiment": "positive",
+                "needs_handoff": False,
                 "timestamp": "2025-11-20T10:30:00Z"
             }
         }

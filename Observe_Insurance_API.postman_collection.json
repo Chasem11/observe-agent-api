@@ -1,18 +1,13 @@
 {
   "info": {
     "name": "Observe Insurance Claims API",
-    "description": "API for Observe Insurance AI Claims Support Assistant. All requests use VAPI tool call format for testing the actual integration.",
+    "description": "API for Observe Insurance AI Claims Support Assistant. All requests use VAPI tool call format.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "base_url",
-      "value": "https://your-cloud-run-url.run.app",
-      "type": "string"
-    },
-    {
-      "key": "local_url",
-      "value": "http://localhost:8000",
+      "value": "https://observe-agent-api-863068629828.us-east1.run.app",
       "type": "string"
     }
   ],
@@ -52,14 +47,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"id\": \"log-44\",\n  \"attributes\": {\n    \"id\": \"call_abc123\",\n    \"function\": {\n      \"name\": \"lookupClaim\",\n      \"arguments\": \"{\\\"phone\\\":\\\"5551234567\\\"}\"\n    }\n  }\n}"
+              "raw": "{\n  \"message\": {\n    \"toolCalls\": [\n      {\n        \"id\": \"call_abc123\",\n        \"type\": \"function\",\n        \"function\": {\n          \"name\": \"lookupClaim\",\n          \"arguments\": {\n            \"phone\": \"5551234567\"\n          }\n        }\n      }\n    ]\n  }\n}"
             },
             "url": {
               "raw": "{{base_url}}/claims/lookup",
               "host": ["{{base_url}}"],
               "path": ["claims", "lookup"]
             },
-            "description": "Look up claim information by phone number. Uses VAPI tool call format with nested attributes.function.arguments."
+            "description": "Look up claim information by phone number. Uses actual VAPI tool call format."
           },
           "response": [
             {
@@ -69,7 +64,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"id\": \"log-44\",\n  \"attributes\": {\n    \"id\": \"call_abc123\",\n    \"function\": {\n      \"name\": \"lookupClaim\",\n      \"arguments\": \"{\\\"phone\\\":\\\"5551234567\\\"}\"\n    }\n  }\n}",
+                  "raw": "{\n  \"message\": {\n    \"toolCalls\": [\n      {\n        \"id\": \"call_abc123\",\n        \"type\": \"function\",\n        \"function\": {\n          \"name\": \"lookupClaim\",\n          \"arguments\": {\n            \"phone\": \"5551234567\"\n          }\n        }\n      }\n    ]\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -95,7 +90,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"id\": \"log-45\",\n  \"attributes\": {\n    \"id\": \"call_xyz789\",\n    \"function\": {\n      \"name\": \"lookupClaim\",\n      \"arguments\": \"{\\\"phone\\\":\\\"9999999999\\\"}\"\n    }\n  }\n}",
+                  "raw": "{\n  \"message\": {\n    \"toolCalls\": [\n      {\n        \"id\": \"call_xyz789\",\n        \"type\": \"function\",\n        \"function\": {\n          \"name\": \"lookupClaim\",\n          \"arguments\": {\n            \"phone\": \"9999999999\"\n          }\n        }\n      }\n    ]\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -134,7 +129,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"id\": \"log-50\",\n  \"attributes\": {\n    \"id\": \"call_interaction_123\",\n    \"function\": {\n      \"name\": \"logInteraction\",\n      \"arguments\": \"{\\\"caller_name\\\":\\\"John Doe\\\",\\\"phone\\\":\\\"5551234567\\\",\\\"summary\\\":\\\"Customer called to check claim status. Claim was approved. Customer satisfied.\\\",\\\"sentiment\\\":\\\"positive\\\",\\\"call_duration\\\":120,\\\"topics\\\":[\\\"claim_status\\\",\\\"authentication\\\"]}\"\n    }\n  }\n}"
+              "raw": "{\n  \"message\": {\n    \"toolCalls\": [\n      {\n        \"id\": \"call_interaction_123\",\n        \"type\": \"function\",\n        \"function\": {\n          \"name\": \"logInteraction\",\n          \"arguments\": {\n            \"caller_name\": \"John Doe\",\n            \"phone\": \"5551234567\",\n            \"summary\": \"Customer authenticated and confirmed claim status was approved.\",\n            \"sentiment\": \"positive\",\n            \"needs_handoff\": false\n          }\n        }\n      }\n    ]\n  }\n}"
             },
             "url": {
               "raw": "{{base_url}}/interactions/log",
@@ -151,7 +146,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"id\": \"log-50\",\n  \"attributes\": {\n    \"id\": \"call_interaction_123\",\n    \"function\": {\n      \"name\": \"logInteraction\",\n      \"arguments\": \"{\\\"caller_name\\\":\\\"John Doe\\\",\\\"phone\\\":\\\"5551234567\\\",\\\"summary\\\":\\\"Customer called to check claim status. Claim was approved. Customer satisfied.\\\",\\\"sentiment\\\":\\\"positive\\\",\\\"call_duration\\\":120,\\\"topics\\\":[\\\"claim_status\\\",\\\"authentication\\\"]}\"\n    }\n  }\n}",
+                  "raw": "{\n  \"message\": {\n    \"toolCalls\": [\n      {\n        \"id\": \"call_interaction_123\",\n        \"type\": \"function\",\n        \"function\": {\n          \"name\": \"logInteraction\",\n          \"arguments\": {\n            \"caller_name\": \"John Doe\",\n            \"phone\": \"5551234567\",\n            \"summary\": \"Customer authenticated and confirmed claim status was approved.\",\n            \"sentiment\": \"positive\",\n            \"needs_handoff\": false\n          }\n        }\n      }\n    ]\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -171,59 +166,6 @@
               "body": "{\n  \"results\": [\n    {\n      \"toolCallId\": \"call_interaction_123\",\n      \"result\": {\n        \"success\": true,\n        \"message\": \"Interaction logged successfully\",\n        \"id\": \"abc123xyz\"\n      }\n    }\n  ]\n}"
             }
           ]
-        }
-      ]
-    },
-    {
-      "name": "Local Testing",
-      "item": [
-        {
-          "name": "Local - Lookup Claim",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"id\": \"log-46\",\n  \"attributes\": {\n    \"id\": \"call_local123\",\n    \"function\": {\n      \"name\": \"lookupClaim\",\n      \"arguments\": \"{\\\"phone\\\":\\\"5551234567\\\"}\"\n    }\n  }\n}"
-            },
-            "url": {
-              "raw": "{{local_url}}/claims/lookup",
-              "host": ["{{local_url}}"],
-              "path": ["claims", "lookup"]
-            },
-            "description": "Test locally on localhost:8000 with VAPI tool call format"
-          },
-          "response": []
-        },
-        {
-          "name": "Local - Log Interaction",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"id\": \"log-51\",\n  \"attributes\": {\n    \"id\": \"call_local_int_123\",\n    \"function\": {\n      \"name\": \"logInteraction\",\n      \"arguments\": \"{\\\"caller_name\\\":\\\"Test User\\\",\\\"phone\\\":\\\"5551234567\\\",\\\"summary\\\":\\\"Test interaction\\\",\\\"sentiment\\\":\\\"neutral\\\"}\"\n    }\n  }\n}"
-            },
-            "url": {
-              "raw": "{{local_url}}/interactions/log",
-              "host": ["{{local_url}}"],
-              "path": ["interactions", "log"]
-            },
-            "description": "Test locally on localhost:8000 with VAPI tool call format"
-          },
-          "response": []
         }
       ]
     }
