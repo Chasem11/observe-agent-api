@@ -297,3 +297,4 @@ This project is part of the Observe.AI Take-Home Assessment for building an AI-p
 Chase Moffat
 - GitHub: [@Chasem11](https://github.com/Chasem11)
 - Cloud Run URL: `https://observe-agent-api-863068629828.us-east1.run.app`
+- VAPI Phone Number: +1 (561) 431 9240
