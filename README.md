@@ -272,25 +272,6 @@ Use the included Postman collection:
 
 ---
 
-## Assignment Context
-
-This project is part of the Observe.AI Take-Home Assessment for building an AI-powered voice assistant for insurance claims support. The assistant handles:
-
-1. **Greeting & Authentication**: Voice-based caller identification
-2. **Claim Status Lookup**: Phone-authenticated claim retrieval
-3. **FAQ Support**: Common insurance questions
-4. **Escalation**: Human handoff when needed
-5. **Call Summary**: Post-call interaction logging
-
-**Key Features Implemented:**
-- Phone-based authentication via VAPI
-- Real-time claim status retrieval from Firestore
-- Post-call sentiment analysis & escalation tracking
-- Cloud-native deployment on GCP
-- Comprehensive logging for debugging
-
----
-
 ## Author
 
 Chase Moffat
