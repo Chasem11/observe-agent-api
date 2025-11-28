@@ -110,7 +110,6 @@ The API uses custom middleware (`VAPISerializer`) to parse VAPI's tool call form
 
 2. **CORS Middleware** (Second Layer)
    - Handles cross-origin requests
-   - Configured for all origins in development
 
 ### API Endpoints
 
@@ -298,3 +297,4 @@ Chase Moffat
 - GitHub: [@Chasem11](https://github.com/Chasem11)
 - Cloud Run URL: `https://observe-agent-api-863068629828.us-east1.run.app`
 - VAPI Phone Number: +1 (561) 431 9240
+  - When testing the agent use (305) 673 4568. The agent should reconginze you as "Test Robertson" your claim status should be "pending".
